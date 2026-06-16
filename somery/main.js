@@ -343,64 +343,11 @@ function buildReleaseGroups(releases) {
         .sort((a, b) => compareVersionsDescending(a.latestVersion, b.latestVersion));
 }
 
-function createChangeItem(change) {
+function createReleaseSummaryItem(release) {
     const item = document.createElement("li");
-    const type = normalizeValue(change && change.type);
-    const text = String((change && change.text) || "").trim();
-
-    if (type) {
-        item.append(createElement("span", "change-type", type.replace(/-/g, " ")));
-    }
-
-    item.append(createElement("span", "change-text", text));
+    item.className = "release-summary-item";
+    item.textContent = String(getUserSummary(release) || getField(release, "title") || getField(release, "version") || "").trim();
     return item;
-}
-
-function createReleaseCard(release) {
-    const card = document.createElement("article");
-    card.className = "release-card";
-
-    const version = String(getField(release, "version") || "").trim();
-    const channel = String(getField(release, "channel") || "").trim();
-    const mergedDate = formatDate(getMergedAt(release));
-    const title = String(getField(release, "title") || "").trim();
-    const summary = String(getUserSummary(release) || "").trim();
-    const releaseType = getReleaseType(release);
-
-    const meta = createElement("div", "release-meta");
-    const versionText = channel ? `${version} · ${channel}` : version;
-
-    if (versionText) {
-        meta.append(createElement("span", "release-version", versionText));
-    }
-
-    meta.append(createElement("span", "release-badge", formatReleaseType(releaseType)));
-
-    if (mergedDate) {
-        meta.append(createElement("span", "release-date", mergedDate));
-    }
-
-    card.append(meta);
-
-    if (title) {
-        card.append(createElement("h3", "", title));
-    }
-
-    if (summary) {
-        card.append(createElement("p", "release-summary", summary));
-    }
-
-    const changes = Array.isArray(release.changes)
-        ? release.changes.filter((change) => change && String(change.text || "").trim())
-        : [];
-
-    if (changes.length) {
-        const list = createElement("ul", "release-changes");
-        changes.forEach((change) => list.append(createChangeItem(change)));
-        card.append(list);
-    }
-
-    return card;
 }
 
 function createSectionHeader(section, isOpen) {
@@ -408,8 +355,8 @@ function createSectionHeader(section, isOpen) {
     header.setAttribute("aria-expanded", String(isOpen));
 
     const copy = createElement("span", "release-section-title-group");
-    copy.append(createElement("span", "release-section-title", section.seriesKey));
-    copy.append(createElement("span", "release-section-subtitle", `Latest: ${section.latestVersion}`));
+    copy.append(createElement("span", "release-section-title", section.latestVersion));
+    copy.append(createElement("span", "release-section-subtitle", section.seriesKey));
 
     const countText = `${section.entries.length} ${section.entries.length === 1 ? "release" : "releases"}`;
     const meta = createElement("span", "release-section-meta");
@@ -446,14 +393,14 @@ function createReleaseSection(section, isNewestSection) {
     }
 
     const header = createSectionHeader(section, isOpen);
-    const content = createElement("div", "release-section-content");
+    const content = createElement("ul", "release-section-content");
 
     section.entries.forEach((release) => {
-        const card = createReleaseCard(release);
-        card.dataset.filterMatch = "true";
-        card.dataset.releaseTokens = Array.from(getReleaseTokens(release)).join(" ");
-        card.dataset.version = String(getField(release, "version") || "");
-        content.append(card);
+        const item = createReleaseSummaryItem(release);
+        item.dataset.filterMatch = "true";
+        item.dataset.releaseTokens = Array.from(getReleaseTokens(release)).join(" ");
+        item.dataset.version = String(getField(release, "version") || "");
+        content.append(item);
     });
 
     header.addEventListener("click", () => {
@@ -592,14 +539,14 @@ function renderReleases(releases) {
 
     buildReleaseGroups(releases).forEach((section, index) => {
         const element = createReleaseSection(section, index === 0);
-        const cards = Array.from(element.querySelectorAll(".release-card"));
+        const items = Array.from(element.querySelectorAll(".release-summary-item"));
 
         changelogState.sections.push({
             key: section.seriesKey,
             element,
             entries: section.entries.map((release, entryIndex) => ({
                 release,
-                element: cards[entryIndex],
+                element: items[entryIndex],
             })),
         });
 

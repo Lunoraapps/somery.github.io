@@ -289,7 +289,6 @@ summary:focus-visible {
 .lens-card,
 .step,
 .price-card,
-.release-card,
 .release-section,
 .release-state,
 .privacy-card,
@@ -573,84 +572,21 @@ details {
 }
 
 .release-section-content {
-    display: grid;
-    gap: 14px;
-    padding: 0 24px 24px 42px;
+    margin: 0;
+    padding: 0 24px 24px 58px;
+    color: var(--muted);
 }
 
 .release-section.is-collapsed .release-section-content {
     display: none;
 }
 
-.release-card {
-    padding: 26px;
-    box-shadow: none;
-    background: rgba(255,255,255,.045);
+.release-summary-item {
+    padding-left: 4px;
 }
 
-.release-meta {
-    margin-bottom: 18px;
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.release-version {
-    font-size: 18px;
-    font-weight: 700;
-}
-
-.release-badge {
-    padding: 5px 10px;
-    border: 1px solid rgba(196, 181, 253, .22);
-    border-radius: 999px;
-    color: var(--accent-2);
-    background: rgba(167, 139, 250, .12);
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-}
-
-.release-date {
-    color: var(--muted);
-    font-size: 14px;
-}
-
-.release-summary {
-    color: var(--muted);
-}
-
-.release-changes {
-    margin: 18px 0 0;
-    padding: 0;
-    display: grid;
-    gap: 8px;
-    list-style: none;
-    color: var(--muted);
-}
-
-.release-changes li {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-}
-
-.change-type {
-    flex-shrink: 0;
-    padding: 3px 8px;
-    border: 1px solid rgba(196, 181, 253, .2);
-    border-radius: 999px;
-    color: var(--accent-2);
-    background: rgba(167, 139, 250, .1);
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: capitalize;
-}
-
-.change-text {
-    min-width: 0;
+.release-summary-item + .release-summary-item {
+    margin-top: 10px;
 }
 
 .release-state {
@@ -667,7 +603,7 @@ details {
 }
 
 .release-section.is-filtered-out,
-.release-card.is-filtered-out {
+.release-summary-item.is-filtered-out {
     display: none;
 }
 
@@ -797,11 +733,6 @@ details p {
 
     .release-section-content {
         padding-inline: 16px;
-    }
-
-    .release-changes li {
-        flex-direction: column;
-        gap: 6px;
     }
 
     .price-card.popular {
