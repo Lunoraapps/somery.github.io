@@ -4,13 +4,32 @@ const navLinks = document.querySelector(".nav-links");
 // Public Supabase Storage object URL. No anon key is required for this JSON file.
 const RELEASES_JSON_URL = "https://psjnupcbpjswihsrnoyu.supabase.co/storage/v1/object/public/public-assets/releases.json";
 const SECTION_STATE_PREFIX = "somery.changelog.section.";
-const FILTERS = [
-    { key: "all", label: "All" },
-    { key: "features", label: "Features" },
-    { key: "improvements", label: "Improvements" },
-    { key: "fixes", label: "Fixes" },
-    { key: "performance", label: "Performance" },
-    { key: "maintenance", label: "Maintenance" },
+const RELEASE_CATEGORIES = [
+    {
+        key: "features",
+        title: "New Features & Major Improvements",
+        tokens: ["feature", "features", "minor", "major"],
+    },
+    {
+        key: "improvements",
+        title: "Enhancements & UX Improvements",
+        tokens: ["improvement", "improvements", "enhancement", "enhancements"],
+    },
+    {
+        key: "fixes",
+        title: "Fixes",
+        tokens: ["fix", "fixes", "bug-fix", "bugfix"],
+    },
+    {
+        key: "performance",
+        title: "Performance",
+        tokens: ["performance", "perf"],
+    },
+    {
+        key: "maintenance",
+        title: "Maintenance",
+        tokens: ["maintenance", "maint", "chore", "chores"],
+    },
 ];
 
 if (navToggle && navLinks) {
@@ -28,10 +47,9 @@ if (navToggle && navLinks) {
 }
 
 const releaseList = document.querySelector("[data-releases-list]");
-const changelogControls = document.querySelector("[data-changelog-controls]");
+const releaseVersionList = document.querySelector("[data-release-versions]");
 let revealObserver = null;
 let changelogState = {
-    activeFilter: "all",
     sections: [],
 };
 
@@ -169,16 +187,6 @@ function formatDate(value) {
     }).format(new Date(timestamp));
 }
 
-function formatReleaseType(value) {
-    const normalized = normalizeValue(value);
-
-    if (!normalized) {
-        return "release";
-    }
-
-    return normalized.replace(/-/g, " ");
-}
-
 function getReleaseType(release) {
     return getField(release, "releaseType", "release_type");
 }
@@ -216,34 +224,9 @@ function getReleaseTokens(release) {
     return tokens;
 }
 
-function releaseMatchesFilter(release, filterKey) {
-    if (filterKey === "all") {
-        return true;
-    }
-
+function releaseMatchesCategory(release, category) {
     const tokens = getReleaseTokens(release);
-
-    if (filterKey === "features") {
-        return tokens.has("feature") || tokens.has("features") || tokens.has("minor") || tokens.has("major");
-    }
-
-    if (filterKey === "improvements") {
-        return tokens.has("improvement") || tokens.has("improvements") || tokens.has("enhancement") || tokens.has("enhancements");
-    }
-
-    if (filterKey === "fixes") {
-        return tokens.has("fix") || tokens.has("fixes") || tokens.has("bug-fix") || tokens.has("bugfix");
-    }
-
-    if (filterKey === "performance") {
-        return tokens.has("performance") || tokens.has("perf");
-    }
-
-    if (filterKey === "maintenance") {
-        return tokens.has("maintenance") || tokens.has("maint") || tokens.has("chore") || tokens.has("chores");
-    }
-
-    return false;
+    return category.tokens.some((token) => tokens.has(token));
 }
 
 function getSectionStorageKey(seriesKey) {
@@ -333,11 +316,14 @@ function buildReleaseGroups(releases) {
                 .map((entry) => getField(entry, "version"))
                 .filter(Boolean)
                 .sort(compareVersionsDescending);
+            const latestVersion = versions[0] || seriesKey;
+            const latestEntry = sortedEntries.find((entry) => getField(entry, "version") === latestVersion) || sortedEntries[0];
 
             return {
                 seriesKey,
                 entries: sortedEntries,
-                latestVersion: versions[0] || seriesKey,
+                latestVersion,
+                latestDate: formatDate(getMergedAt(latestEntry) || getPublishedAt(latestEntry)),
             };
         })
         .sort((a, b) => compareVersionsDescending(a.latestVersion, b.latestVersion));
@@ -350,17 +336,36 @@ function createReleaseSummaryItem(release) {
     return item;
 }
 
+function getReleaseCategory(release) {
+    return RELEASE_CATEGORIES.find((category) => releaseMatchesCategory(release, category))
+        || RELEASE_CATEGORIES[RELEASE_CATEGORIES.length - 1];
+}
+
+function createCategoryBlock(category, releases) {
+    const block = createElement("section", "release-category");
+    block.append(createElement("h3", "release-category-title", category.title));
+
+    const list = createElement("ul", "release-category-list");
+    releases.forEach((release) => list.append(createReleaseSummaryItem(release)));
+    block.append(list);
+
+    return block;
+}
+
 function createSectionHeader(section, isOpen) {
     const header = createButton("release-section-header", "");
     header.setAttribute("aria-expanded", String(isOpen));
 
     const copy = createElement("span", "release-section-title-group");
     copy.append(createElement("span", "release-section-title", section.latestVersion));
-    copy.append(createElement("span", "release-section-subtitle", section.seriesKey));
 
-    const countText = `${section.entries.length} ${section.entries.length === 1 ? "release" : "releases"}`;
     const meta = createElement("span", "release-section-meta");
-    meta.append(createElement("span", "release-count", countText));
+
+    if (section.latestDate) {
+        copy.append(createElement("span", "release-section-subtitle", section.latestDate));
+    }
+
+    meta.append(createElement("span", "release-count", section.seriesKey));
     meta.append(createElement("span", "release-chevron", ""));
 
     header.append(copy, meta);
@@ -393,129 +398,71 @@ function createReleaseSection(section, isNewestSection) {
     }
 
     const header = createSectionHeader(section, isOpen);
-    const content = createElement("ul", "release-section-content");
+    const content = createElement("div", "release-section-content");
+    const entriesByCategory = new Map();
+
+    RELEASE_CATEGORIES.forEach((category) => entriesByCategory.set(category.key, []));
 
     section.entries.forEach((release) => {
-        const item = createReleaseSummaryItem(release);
-        item.dataset.filterMatch = "true";
-        item.dataset.releaseTokens = Array.from(getReleaseTokens(release)).join(" ");
-        item.dataset.version = String(getField(release, "version") || "");
-        content.append(item);
+        const category = getReleaseCategory(release);
+        entriesByCategory.get(category.key).push(release);
+    });
+
+    RELEASE_CATEGORIES.forEach((category) => {
+        const releases = entriesByCategory.get(category.key);
+
+        if (releases.length) {
+            content.append(createCategoryBlock(category, releases));
+        }
     });
 
     header.addEventListener("click", () => {
         setSectionOpen(sectionElement, sectionElement.classList.contains("is-collapsed"));
+        setActiveVersion(section.seriesKey);
     });
 
     sectionElement.append(header, content);
     return sectionElement;
 }
 
-function createFilterControls() {
-    if (!changelogControls) {
+function setActiveVersion(seriesKey) {
+    if (!releaseVersionList) {
         return;
     }
 
-    changelogControls.replaceChildren();
-
-    const filterRow = createElement("div", "release-filter-row");
-
-    FILTERS.forEach((filter) => {
-        const button = createButton("release-filter-chip", filter.label);
-        button.dataset.filter = filter.key;
-        button.setAttribute("aria-pressed", String(filter.key === changelogState.activeFilter));
-
-        if (filter.key === changelogState.activeFilter) {
-            button.classList.add("is-active");
-        }
-
-        button.addEventListener("click", () => applyFilter(filter.key));
-        filterRow.append(button);
-    });
-
-    const sectionActions = createElement("div", "release-section-actions");
-    const expandAll = createButton("release-action-button", "Expand all");
-    const collapseAll = createButton("release-action-button", "Collapse all");
-
-    expandAll.addEventListener("click", () => setAllSectionsOpen(true));
-    collapseAll.addEventListener("click", () => setAllSectionsOpen(false));
-
-    sectionActions.append(expandAll, collapseAll);
-    changelogControls.append(filterRow, sectionActions);
-}
-
-function updateFilterControls() {
-    if (!changelogControls) {
-        return;
-    }
-
-    changelogControls.querySelectorAll("[data-filter]").forEach((button) => {
-        const isActive = button.dataset.filter === changelogState.activeFilter;
+    releaseVersionList.querySelectorAll("[data-series-key]").forEach((button) => {
+        const isActive = button.dataset.seriesKey === seriesKey;
         button.classList.toggle("is-active", isActive);
-        button.setAttribute("aria-pressed", String(isActive));
+        button.setAttribute("aria-current", isActive ? "true" : "false");
     });
 }
 
-function setAllSectionsOpen(isOpen) {
-    changelogState.sections.forEach((section) => {
-        setSectionOpen(section.element, isOpen);
-    });
-}
+function createVersionNavItem(section, isActive) {
+    const button = createButton("release-version-item", "");
+    button.dataset.seriesKey = section.seriesKey;
+    button.setAttribute("aria-current", isActive ? "true" : "false");
 
-function showNoFilterMatches() {
-    if (!releaseList || releaseList.querySelector("[data-filter-empty]")) {
-        return;
+    if (isActive) {
+        button.classList.add("is-active");
     }
 
-    const state = createElement("div", "release-state release-filter-empty");
-    state.dataset.filterEmpty = "true";
-    state.append(createElement("p", "", "No releases match this filter"));
+    button.append(createElement("span", "release-version-name", section.latestVersion));
 
-    const clear = createButton("release-state-action", "Clear filter");
-    clear.addEventListener("click", () => applyFilter("all"));
-    state.append(clear);
-
-    releaseList.append(state);
-}
-
-function hideNoFilterMatches() {
-    const state = releaseList && releaseList.querySelector("[data-filter-empty]");
-
-    if (state) {
-        state.remove();
+    if (section.latestDate) {
+        button.append(createElement("span", "release-version-date", section.latestDate));
     }
-}
 
-function applyFilter(filterKey) {
-    changelogState.activeFilter = filterKey;
-    updateFilterControls();
+    button.addEventListener("click", () => {
+        const sectionState = changelogState.sections.find((item) => item.key === section.seriesKey);
 
-    let visibleSections = 0;
-
-    changelogState.sections.forEach((section) => {
-        let visibleEntries = 0;
-
-        section.entries.forEach((entry) => {
-            const isMatch = releaseMatchesFilter(entry.release, filterKey);
-            entry.element.classList.toggle("is-filtered-out", !isMatch);
-
-            if (isMatch) {
-                visibleEntries += 1;
-            }
-        });
-
-        section.element.classList.toggle("is-filtered-out", visibleEntries === 0);
-
-        if (visibleEntries > 0) {
-            visibleSections += 1;
+        if (sectionState) {
+            setSectionOpen(sectionState.element, true);
+            setActiveVersion(section.seriesKey);
+            sectionState.element.scrollIntoView({ behavior: "smooth", block: "start" });
         }
     });
 
-    if (filterKey !== "all" && visibleSections === 0) {
-        showNoFilterMatches();
-    } else {
-        hideNoFilterMatches();
-    }
+    return button;
 }
 
 function renderReleases(releases) {
@@ -526,35 +473,39 @@ function renderReleases(releases) {
     releaseList.replaceChildren();
     changelogState.sections = [];
 
+    if (releaseVersionList) {
+        releaseVersionList.replaceChildren();
+    }
+
     if (!Array.isArray(releases) || !releases.length) {
-        if (changelogControls) {
-            changelogControls.replaceChildren();
+        if (releaseVersionList) {
+            releaseVersionList.append(createReleaseState("No versions yet", "empty"));
         }
 
         releaseList.append(createReleaseState("No releases yet", "empty"));
         return;
     }
 
-    createFilterControls();
+    const groups = buildReleaseGroups(releases);
 
-    buildReleaseGroups(releases).forEach((section, index) => {
+    if (releaseVersionList) {
+        groups.forEach((section, index) => {
+            releaseVersionList.append(createVersionNavItem(section, index === 0));
+        });
+    }
+
+    groups.forEach((section, index) => {
         const element = createReleaseSection(section, index === 0);
-        const items = Array.from(element.querySelectorAll(".release-summary-item"));
 
         changelogState.sections.push({
             key: section.seriesKey,
             element,
-            entries: section.entries.map((release, entryIndex) => ({
-                release,
-                element: items[entryIndex],
-            })),
         });
 
         releaseList.append(element);
     });
 
     observeRevealItem(releaseList);
-    applyFilter(changelogState.activeFilter);
 }
 
 async function loadSomeryReleases() {
@@ -563,6 +514,10 @@ async function loadSomeryReleases() {
     }
 
     releaseList.replaceChildren(createReleaseState("Loading Somery releases...", "empty"));
+
+    if (releaseVersionList) {
+        releaseVersionList.replaceChildren(createReleaseState("Loading versions...", "empty"));
+    }
 
     try {
         const response = await fetch(RELEASES_JSON_URL, {
@@ -578,8 +533,8 @@ async function loadSomeryReleases() {
         const payload = await response.json();
         renderReleases(normalizeReleasesPayload(payload));
     } catch (error) {
-        if (changelogControls) {
-            changelogControls.replaceChildren();
+        if (releaseVersionList) {
+            releaseVersionList.replaceChildren(createReleaseState("Versions unavailable.", "error"));
         }
 
         releaseList.replaceChildren(
