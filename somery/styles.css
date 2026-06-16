@@ -4,8 +4,8 @@
     --bg-3: #2d1b4e;
     --text: #f5f3ff;
     --muted: rgba(245, 243, 255, .68);
+    --soft: rgba(245, 243, 255, .1);
     --line: rgba(245, 243, 255, .14);
-    --soft: rgba(255, 255, 255, .07);
     --accent: #a78bfa;
     --accent-2: #c4b5fd;
     --radius: 24px;
@@ -22,12 +22,12 @@ html {
 
 body {
     margin: 0;
-    color: var(--text);
     font-family: -apple-system, BlinkMacSystemFont, "Poppins", "Segoe UI", system-ui, sans-serif;
+    color: var(--text);
     background:
-            radial-gradient(circle at 15% 0%, rgba(167, 139, 250, .22), transparent 32%),
-            radial-gradient(circle at 85% 20%, rgba(76, 29, 149, .34), transparent 34%),
-            linear-gradient(145deg, var(--bg-2), var(--bg-3) 45%, var(--bg));
+            radial-gradient(circle at 20% 0%, rgba(167, 139, 250, .25), transparent 30%),
+            radial-gradient(circle at 80% 20%, rgba(76, 29, 149, .4), transparent 30%),
+            linear-gradient(140deg, var(--bg-2), var(--bg-3) 45%, var(--bg));
     line-height: 1.5;
 }
 
@@ -36,8 +36,9 @@ a {
     text-decoration: none;
 }
 
-button {
-    font: inherit;
+img {
+    display: block;
+    max-width: 100%;
 }
 
 .container {
@@ -46,7 +47,7 @@ button {
 }
 
 .section {
-    padding: 84px 0;
+    padding: 80px 0;
 }
 
 .site-header {
@@ -54,8 +55,8 @@ button {
     top: 0;
     z-index: 20;
     background: rgba(15, 20, 41, .72);
-    border-bottom: 1px solid var(--line);
     backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--line);
 }
 
 .nav {
@@ -69,26 +70,17 @@ button {
 .nav-links {
     display: flex;
     align-items: center;
+    gap: 20px;
 }
 
 .brand {
     gap: 10px;
-    font-weight: 700;
+    font-weight: 600;
 }
 
-.brand-mark {
-    width: 34px;
-    height: 34px;
-    display: grid;
-    place-items: center;
-    border-radius: 12px;
-    color: #120d24;
-    background: linear-gradient(135deg, var(--accent-2), var(--accent));
-    box-shadow: 0 0 30px rgba(167, 139, 250, .35);
-}
-
-.nav-links {
-    gap: 22px;
+.brand-logo {
+    width: 32px;
+    height: 32px;
 }
 
 .nav-links a {
@@ -116,8 +108,9 @@ button {
     content: "";
     position: absolute;
     inset: 0;
-    background-image: radial-gradient(circle, rgba(255,255,255,.58) 1px, transparent 1px);
-    background-size: 68px 68px;
+    background-image:
+            radial-gradient(circle, rgba(255,255,255,.55) 1px, transparent 1px);
+    background-size: 64px 64px;
     opacity: .12;
     pointer-events: none;
 }
@@ -131,12 +124,11 @@ button {
 }
 
 .eyebrow {
-    margin: 0 0 14px;
     color: var(--accent-2);
     font-size: 13px;
-    font-weight: 700;
     letter-spacing: .12em;
     text-transform: uppercase;
+    font-weight: 600;
 }
 
 h1,
@@ -147,7 +139,7 @@ p {
 }
 
 h1 {
-    max-width: 760px;
+    max-width: 720px;
     margin-bottom: 22px;
     font-size: clamp(48px, 7vw, 84px);
     line-height: .96;
@@ -157,7 +149,6 @@ h1 {
 
 h2 {
     max-width: 720px;
-    margin-bottom: 0;
     font-size: clamp(32px, 4vw, 52px);
     line-height: 1.05;
     font-weight: 600;
@@ -165,21 +156,24 @@ h2 {
 }
 
 h3 {
-    margin-bottom: 10px;
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 600;
 }
 
 .hero-text,
-.project-card p,
-.value-card p,
-.about-copy,
-.contact-card p {
+.section-head p,
+.card p,
+.lens-card p,
+.step p,
+.privacy-card p,
+.price-card p,
+details p,
+.pricing-note {
     color: var(--muted);
 }
 
 .hero-text {
-    max-width: 640px;
+    max-width: 620px;
     font-size: 20px;
 }
 
@@ -197,22 +191,12 @@ h3 {
     justify-content: center;
     padding: 0 22px;
     border-radius: 999px;
-    font-weight: 700;
-    transition: transform .2s ease, border-color .2s ease, background .2s ease;
+    font-weight: 600;
+    transition: transform .2s ease, background .2s ease, border-color .2s ease;
 }
 
 .btn:hover {
     transform: translateY(-2px);
-}
-
-.btn-primary {
-    color: #120d24;
-    background: linear-gradient(135deg, var(--accent-2), var(--accent));
-}
-
-.btn-secondary {
-    border: 1px solid var(--line);
-    background: rgba(255,255,255,.06);
 }
 
 .btn:focus-visible,
@@ -223,144 +207,94 @@ summary:focus-visible {
     outline-offset: 4px;
 }
 
-.orb-card {
-    min-height: 440px;
+.btn-primary {
+    color: #120d24;
+    background: linear-gradient(135deg, var(--accent-2), var(--accent));
+}
+
+.btn-secondary {
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, .06);
+}
+
+.phone-wrap {
     position: relative;
-    border: 1px solid var(--line);
-    border-radius: 36px;
-    background:
-            radial-gradient(circle at 50% 40%, rgba(167, 139, 250, .18), transparent 36%),
-            linear-gradient(180deg, rgba(255,255,255,.1), rgba(255,255,255,.045));
+    justify-self: center;
+}
+
+.phone-glow {
+    position: absolute;
+    inset: 12%;
+    background: rgba(167, 139, 250, .4);
+    filter: blur(70px);
+}
+
+.phone {
+    position: relative;
+    width: min(340px, 74vw);
+    padding: 12px;
+    border-radius: 42px;
+    background: linear-gradient(180deg, rgba(255,255,255,.24), rgba(255,255,255,.06));
     box-shadow: var(--shadow);
-    backdrop-filter: blur(18px);
-    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.18);
 }
 
-.orb {
-    width: 220px;
-    height: 220px;
+.phone img {
+    border-radius: 32px;
+    aspect-ratio: 9 / 19.5;
+    object-fit: cover;
+    background: rgba(255, 255, 255, .06);
+}
+
+.phone-notch {
     position: absolute;
-    inset: 50% auto auto 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    background:
-            radial-gradient(circle at 35% 28%, #f5f3ff, var(--accent-2) 22%, var(--accent) 50%, rgba(76,29,149,.3) 72%);
-    box-shadow:
-            0 0 80px rgba(167,139,250,.55),
-            inset 0 0 30px rgba(255,255,255,.24);
+    top: 22px;
+    left: 50%;
+    width: 92px;
+    height: 26px;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    background: #070914;
+    z-index: 2;
 }
 
-.mini-card {
-    position: absolute;
-    width: 150px;
-    padding: 18px;
-    border: 1px solid var(--line);
-    border-radius: 22px;
-    background: rgba(15, 20, 41, .62);
-    backdrop-filter: blur(16px);
-}
-
-.mini-card span {
-    display: block;
-    margin-bottom: 8px;
-    color: var(--accent-2);
+.mockup-caption {
+    margin-top: 14px;
+    text-align: center;
+    color: var(--muted);
     font-size: 13px;
-    font-weight: 700;
-}
-
-.card-one {
-    top: 52px;
-    left: 46px;
-}
-
-.card-two {
-    right: 42px;
-    top: 150px;
-}
-
-.card-three {
-    left: 74px;
-    bottom: 54px;
 }
 
 .section-head {
     margin-bottom: 34px;
 }
 
-.projects-grid,
-.values-grid {
+.feature-grid,
+.lens-grid,
+.pricing-grid,
+.steps {
     display: grid;
     gap: 18px;
 }
 
-.projects-grid {
-    grid-template-columns: 1.2fr .8fr;
+.feature-grid {
+    grid-template-columns: repeat(3, 1fr);
 }
 
-.project-card,
-.value-card,
-.contact-card {
+.card,
+.lens-card,
+.step,
+.price-card,
+.privacy-card,
+details {
     border: 1px solid var(--line);
-    border-radius: var(--radius);
     background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.045));
+    border-radius: var(--radius);
     box-shadow: 0 18px 60px rgba(0,0,0,.16);
     backdrop-filter: blur(18px);
 }
 
-.project-card {
-    min-height: 280px;
-    padding: 28px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.project-card.featured {
-    background:
-            radial-gradient(circle at 85% 15%, rgba(167, 139, 250, .22), transparent 36%),
-            linear-gradient(180deg, rgba(255,255,255,.1), rgba(255,255,255,.045));
-}
-
-.project-label {
-    margin-bottom: 12px;
-    color: var(--accent-2);
-    font-size: 13px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: .1em;
-}
-
-.project-link {
-    width: fit-content;
-    margin-top: 26px;
-    color: var(--accent-2);
-    font-weight: 700;
-}
-
-.project-link.muted {
-    color: var(--muted);
-}
-
-.soft-section {
-    background: rgba(255,255,255,.035);
-    border-block: 1px solid var(--line);
-}
-
-.about-grid {
-    display: grid;
-    grid-template-columns: .9fr 1.1fr;
-    gap: 48px;
-}
-
-.about-copy {
-    font-size: 18px;
-}
-
-.values-grid {
-    grid-template-columns: repeat(4, 1fr);
-}
-
-.value-card {
+.card {
     padding: 26px;
 }
 
@@ -376,20 +310,158 @@ summary:focus-visible {
     font-size: 26px;
 }
 
-.contact-card {
+.soft-section {
+    background: rgba(255,255,255,.035);
+    border-block: 1px solid var(--line);
+}
+
+.lens-grid {
+    grid-template-columns: repeat(6, minmax(220px, 1fr));
+    overflow-x: auto;
+    padding-bottom: 8px;
+}
+
+.lens-card {
+    padding: 22px;
+}
+
+.steps {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.step {
+    padding: 30px;
+}
+
+.step span {
+    color: var(--accent-2);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.privacy-section {
+    padding-top: 40px;
+}
+
+.privacy-card {
     padding: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1.2fr .8fr;
     gap: 28px;
     background:
-            radial-gradient(circle at 85% 20%, rgba(167,139,250,.24), transparent 32%),
+            radial-gradient(circle at 80% 20%, rgba(167,139,250,.24), transparent 32%),
             rgba(255,255,255,.07);
 }
 
+.privacy-card ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 12px;
+}
+
+.privacy-card li {
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.07);
+    color: var(--muted);
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.chips span {
+    padding: 12px 18px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,.07);
+    color: var(--accent-2);
+    font-weight: 700;
+}
+
+.pricing-grid {
+    grid-template-columns: repeat(3, 1fr);
+    align-items: stretch;
+}
+
+.price-card {
+    position: relative;
+    padding: 28px;
+}
+
+.price-card.popular {
+    border-color: rgba(196, 181, 253, .55);
+    transform: translateY(-10px);
+}
+
+.price {
+    margin: 18px 0;
+    font-size: 38px;
+    color: var(--text);
+    font-weight: 600;
+}
+
+.price span {
+    font-size: 16px;
+    color: var(--muted);
+}
+
+.badge {
+    position: absolute;
+    top: 0;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    padding: 8px 14px;
+    border-radius: 999px;
+
+    background: var(--accent-2);
+    color: #120d24;
+
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+
+    z-index: 2;
+}
+
+/*.badge.muted {*/
+/*    color: var(--accent-2);*/
+/*    background: rgba(167, 139, 250, .14);*/
+/*}*/
+
+.pricing-note {
+    margin-top: 18px;
+    text-align: center;
+}
+
+.faq-list {
+    display: grid;
+    gap: 12px;
+}
+
+details {
+    padding: 20px 22px;
+}
+
+summary {
+    cursor: pointer;
+    font-weight: 600;
+}
+
+details p {
+    margin: 14px 0 0;
+}
+
 .footer {
-    padding: 32px 0;
     border-top: 1px solid var(--line);
+    padding: 32px 0;
     color: var(--muted);
 }
 
@@ -422,23 +494,24 @@ summary:focus-visible {
 
 @media (max-width: 1024px) {
     .hero-grid,
-    .projects-grid,
-    .about-grid {
+    .privacy-card {
         grid-template-columns: 1fr;
     }
 
-    .values-grid {
+    .feature-grid,
+    .pricing-grid,
+    .steps {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .orb-card {
-        min-height: 360px;
+    .phone-wrap {
+        margin-top: 20px;
     }
 }
 
 @media (max-width: 640px) {
     .section {
-        padding: 58px 0;
+        padding: 56px 0;
     }
 
     .nav-toggle {
@@ -476,34 +549,14 @@ summary:focus-visible {
         display: flex;
     }
 
-    .values-grid {
+    .feature-grid,
+    .pricing-grid,
+    .steps {
         grid-template-columns: 1fr;
     }
 
-    .orb {
-        width: 170px;
-        height: 170px;
-    }
-
-    .mini-card {
-        width: 130px;
-    }
-
-    .card-one {
-        left: 22px;
-    }
-
-    .card-two {
-        right: 22px;
-    }
-
-    .card-three {
-        left: 36px;
-    }
-
-    .contact-card {
-        align-items: flex-start;
-        flex-direction: column;
+    .price-card.popular {
+        transform: none;
     }
 
     .footer-inner {
