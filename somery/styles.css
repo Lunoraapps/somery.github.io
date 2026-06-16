@@ -1,7 +1,7 @@
 :root {
-    --bg: #0f1429;
-    --bg-2: #1a1530;
-    --bg-3: #2d1b4e;
+    --bg: #0b1026;
+    --bg-2: #111c44;
+    --bg-3: #243b7a;
     --text: #f5f3ff;
     --muted: rgba(245, 243, 255, .68);
     --soft: rgba(245, 243, 255, .1);
@@ -25,8 +25,8 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Poppins", "Segoe UI", system-ui, sans-serif;
     color: var(--text);
     background:
-            radial-gradient(circle at 20% 0%, rgba(167, 139, 250, .25), transparent 30%),
-            radial-gradient(circle at 80% 20%, rgba(76, 29, 149, .4), transparent 30%),
+            radial-gradient(circle at 20% 0%, rgba(99, 102, 241, .22), transparent 30%),
+            radial-gradient(circle at 80% 20%, rgba(30, 64, 175, .34), transparent 30%),
             linear-gradient(140deg, var(--bg-2), var(--bg-3) 45%, var(--bg));
     line-height: 1.5;
 }
