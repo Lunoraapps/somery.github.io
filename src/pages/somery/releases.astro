@@ -1,0 +1,36 @@
+---
+import SomeryLayout from "../../layouts/SomeryLayout.astro";
+---
+
+<SomeryLayout
+  title="Somery Releases — AI Dream Journal for iOS"
+  description="Somery release notes and changelog for the AI dream journal iOS app."
+  activePage="releases"
+>
+  <section id="releases" class="section releases-page">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Releases</p>
+        <h1>Somery changelog.</h1>
+        <p>Follow the latest Somery updates, grouped by minor release line.</p>
+      </div>
+
+      <div class="release-layout reveal">
+        <aside class="release-version-sidebar" aria-label="Release versions">
+          <p class="release-sidebar-title">Versions</p>
+          <div class="release-version-list" data-release-versions>
+            <div class="release-state">
+              <p>Loading versions...</p>
+            </div>
+          </div>
+        </aside>
+
+        <div class="changelog-list" data-releases-list>
+          <div class="release-state">
+            <p>Loading Somery releases...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</SomeryLayout>

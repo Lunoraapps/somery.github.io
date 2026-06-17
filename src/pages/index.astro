@@ -1,0 +1,150 @@
+---
+import LunoraLayout from "../layouts/LunoraLayout.astro";
+
+const projects = [
+  {
+    label: "iOS App",
+    title: "Somery",
+    text: "A calm AI dream journal for recording dreams, exploring interpretations, and tracking recurring symbols, moods, and patterns over time.",
+    link: {
+      href: "/somery/",
+      label: "Open Somery",
+    },
+    featured: true,
+  },
+  {
+    label: "Coming later",
+    title: "New project",
+    text: "Placeholder area for future Lunora products, experiments, or internal tools.",
+    link: {
+      label: "In progress",
+      muted: true,
+    },
+  },
+];
+
+const values = [
+  ["✦", "Calm by default", "Interfaces should reduce pressure, not create more of it."],
+  ["◌", "Useful AI", "AI should support reflection and clarity, not replace user judgment."],
+  ["□", "Privacy-first", "Personal data deserves careful handling and clear user control."],
+  ["⌁", "Long-term quality", "Simple, maintainable products are better than overloaded feature sets."],
+];
+---
+
+<LunoraLayout
+  title="Lunora — Independent App Studio"
+  description="Lunora is an independent app studio creating calm, thoughtful digital products for everyday reflection, creativity, and personal insight."
+>
+  <section class="hero section">
+    <div class="container hero-grid">
+      <div class="hero-copy reveal">
+        <p class="eyebrow">Independent App Studio</p>
+        <h1>Quiet digital products for personal insight.</h1>
+        <p class="hero-text">
+          Lunora creates calm, thoughtful applications focused on reflection, creativity, privacy, and everyday emotional clarity.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#projects">View projects</a>
+          <a class="btn btn-secondary" href="mailto:support@lunora.space">Contact us</a>
+        </div>
+      </div>
+
+      <div class="orb-card reveal" aria-hidden="true">
+        <div class="orb"></div>
+        <div class="mini-card card-one">
+          <span>01</span>
+          <strong>Apps</strong>
+        </div>
+        <div class="mini-card card-two">
+          <span>02</span>
+          <strong>AI</strong>
+        </div>
+        <div class="mini-card card-three">
+          <span>03</span>
+          <strong>Privacy</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Projects</p>
+        <h2>Products we are building.</h2>
+      </div>
+
+      <div class="projects-grid">
+        {
+          projects.map((project) => (
+            <article class:list={["project-card", project.featured && "featured", "reveal"]}>
+              <div>
+                <p class="project-label">{project.label}</p>
+                <h3>{project.title}</h3>
+                <p>{project.text}</p>
+              </div>
+
+              {project.link.href ? (
+                <a class="project-link" href={project.link.href}>{project.link.label}</a>
+              ) : (
+                <span class:list={["project-link", project.link.muted && "muted"]}>{project.link.label}</span>
+              )}
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="section soft-section">
+    <div class="container about-grid">
+      <div class="section-head reveal">
+        <p class="eyebrow">About</p>
+        <h2>A small studio with a product-first mindset.</h2>
+      </div>
+
+      <div class="about-copy reveal">
+        <p>
+          Lunora is currently focused on building mobile-first digital products with simple interfaces, thoughtful AI features, and strong respect for user privacy.
+        </p>
+        <p>
+          The studio explores tools that help people better understand their thoughts, routines, emotions, and creative ideas without turning the experience into noise.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="values" class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Values</p>
+        <h2>How we think about products.</h2>
+      </div>
+
+      <div class="values-grid">
+        {
+          values.map(([icon, title, text]) => (
+            <article class="value-card reveal">
+              <div class="icon">{icon}</div>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section contact-section">
+    <div class="container contact-card reveal">
+      <div>
+        <p class="eyebrow">Contact</p>
+        <h2>Want to reach Lunora?</h2>
+        <p>For product questions, support, or collaboration requests, contact us by email.</p>
+      </div>
+
+      <a class="btn btn-primary" href="mailto:support@lunora.space">support@lunora.space</a>
+    </div>
+  </section>
+</LunoraLayout>

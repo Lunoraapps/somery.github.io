@@ -1,0 +1,26 @@
+---
+const links = [
+  { href: "#projects", label: "Projects" },
+  { href: "#about", label: "About" },
+  { href: "#values", label: "Values" },
+  { href: "#contact", label: "Contact" },
+];
+---
+
+<header class="site-header">
+  <nav class="nav container" aria-label="Main navigation">
+    <a class="brand" href="/">
+      <span class="brand-mark">L</span>
+      <span>Lunora</span>
+    </a>
+
+    <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+    </button>
+
+    <div class="nav-links">
+      {links.map((link) => <a href={link.href}>{link.label}</a>)}
+    </div>
+  </nav>
+</header>

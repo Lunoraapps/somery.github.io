@@ -1,0 +1,48 @@
+---
+interface Props {
+  activePage?: "home" | "releases";
+}
+
+const { activePage = "home" } = Astro.props;
+const homeHref = "/somery/";
+const sectionPrefix = activePage === "home" ? "" : homeHref;
+
+const links: Array<{
+  href: string;
+  label: string;
+  page?: Props["activePage"];
+}> = [
+  { href: `${sectionPrefix}#features`, label: "Features" },
+  { href: `${sectionPrefix}#privacy`, label: "Privacy" },
+  { href: "/somery/releases/", label: "Releases", page: "releases" },
+  { href: `${sectionPrefix}#pricing`, label: "Pricing" },
+  { href: `${sectionPrefix}#faq`, label: "FAQ" },
+] as const;
+---
+
+<header class="site-header">
+  <nav class="nav container" aria-label="Main navigation">
+    <a class="brand" href={homeHref}>
+      <img src="/somery/assets/logo.png" alt="" class="brand-logo" />
+      <span>Somery</span>
+    </a>
+
+    <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+    </button>
+
+    <div class="nav-links">
+      {
+        links.map((link) => (
+          <a
+            class:list={[link.page === activePage && "is-active"]}
+            href={link.href}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+    </div>
+  </nav>
+</header>

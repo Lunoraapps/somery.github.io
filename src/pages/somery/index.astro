@@ -1,0 +1,247 @@
+---
+import SomeryLayout from "../../layouts/SomeryLayout.astro";
+
+const features = [
+  {
+    icon: "◌",
+    title: "Voice & Text Capture",
+    text: "Dictate dreams with on-device Apple Speech or write them manually in the editor.",
+  },
+  {
+    icon: "✦",
+    title: "6 Interpretation Lenses",
+    text: "Explore Balanced, Jungian, Freudian, Scientific, Esoteric, and Personal Growth views.",
+  },
+  {
+    icon: "☾",
+    title: "Dream Visualization",
+    text: "Generate an AI image from the dream text and attach it to your journal entry.",
+  },
+  {
+    icon: "□",
+    title: "Local-First Journal",
+    text: "Your dreams are stored locally on device with SwiftData by default.",
+  },
+  {
+    icon: "⌁",
+    title: "Insights & Patterns",
+    text: "Track moods, recurring symbols, nightmares, lucid dreams, and monthly themes.",
+  },
+  {
+    icon: "⌘",
+    title: "Privacy Lock",
+    text: "Protect your journal with Face ID or Passcode and keep control over exports.",
+  },
+];
+
+const lenses = [
+  ["Balanced", "A soft, grounded interpretation with emotional context."],
+  ["Jungian", "Archetypes, shadow, symbols, and individuation."],
+  ["Freudian", "Hidden wishes, inner conflict, and displaced emotions."],
+  ["Scientific", "Memory, stress, sleep psychology, and cognitive patterns."],
+  ["Esoteric", "Symbolic language without dogmatism."],
+  ["Personal Growth", "Reflection, behavior, and gentle next steps."],
+];
+
+const steps = [
+  ["01", "Record your dream", "Use voice or text right after waking up."],
+  ["02", "Choose a lens", "Get AI insight in the style that matches your mood."],
+  ["03", "Track patterns", "Notice symbols, moods, and recurring themes over time."],
+];
+
+const privacyItems = [
+  "Local SwiftData storage",
+  "Face ID / Passcode lock",
+  "JSON and Markdown export",
+  "No cloud by default",
+];
+
+const pricing = [
+  {
+    title: "1-Week plan",
+    price: "$2.99",
+    text: "25 AI credits per week.",
+  },
+  {
+    title: "1-Month Plan",
+    price: "$9.99",
+    suffix: "/ month",
+    text: "3-day trial, 100 AI credits per month.",
+    badge: "Most popular",
+    popular: true,
+  },
+  {
+    title: "3-Month Plan",
+    price: "$24.99",
+    text: "100 AI credits per month.",
+    badge: "Save 17%",
+    mutedBadge: true,
+  },
+];
+
+const faq = [
+  [
+    "Does it work without internet?",
+    "The journal works without AI. Internet is needed for AI interpretation and image generation.",
+  ],
+  ["Where are my dreams stored?", "Dreams are stored locally on your device by default using SwiftData."],
+  ["Can I use it without AI?", "Yes. You can save dreams without interpretation."],
+  ["Is Somery a medical tool?", "No. Somery is for reflection and journaling, not diagnosis or medical advice."],
+  ["Which languages are supported?", "English, Español, Français, Русский, Українська."],
+  ["How do AI credits work?", "Credits are used for AI-powered actions such as interpretation and visualization."],
+];
+---
+
+<SomeryLayout
+  title="Somery — AI Dream Journal for iOS"
+  description="Somery is a calm AI dream journal for iOS. Record dreams by voice or text, explore interpretations, patterns, moods, and symbols — privacy-first."
+  ogTitle="Somery — AI Dream Journal"
+  ogDescription="A calm AI journal for the dreams you almost forgot."
+  twitterTitle="Somery — AI Dream Journal"
+  twitterDescription="Your dreams, gently understood."
+>
+  <section class="hero section">
+    <div class="container hero-grid">
+      <div class="hero-copy reveal">
+        <div class="eyebrow">AI Dream Journal for iOS</div>
+        <h1>Your dreams, gently understood.</h1>
+        <p class="hero-text">
+          Somery is a calm, privacy-first dream journal that helps you record dreams, interpret emotions and symbols, and notice patterns over time.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#">Download on the App Store</a>
+          <a class="btn btn-secondary" href="#features">See features</a>
+        </div>
+      </div>
+
+      <div class="phone-wrap reveal">
+        <div class="phone-glow"></div>
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <img src="/somery/assets/screenshot-today.png" alt="Somery Today screen screenshot" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Features</p>
+        <h2>Everything for a calm morning dream ritual.</h2>
+      </div>
+
+      <div class="feature-grid">
+        {
+          features.map((feature) => (
+            <article class="card reveal">
+              <div class="icon">{feature.icon}</div>
+              <h3>{feature.title}</h3>
+              <p>{feature.text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section soft-section">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Interpretation Styles</p>
+        <h2>Choose the lens that fits the dream.</h2>
+      </div>
+
+      <div class="lens-grid">
+        {
+          lenses.map(([title, text]) => (
+            <article class="lens-card reveal">
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">How it works</p>
+        <h2>From half-remembered dream to useful reflection.</h2>
+      </div>
+
+      <div class="steps">
+        {
+          steps.map(([number, title, text]) => (
+            <article class="step reveal">
+              <span>{number}</span>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="privacy" class="section privacy-section">
+    <div class="container privacy-card reveal">
+      <div>
+        <p class="eyebrow">Privacy</p>
+        <h2>Your dreams stay on your device.</h2>
+        <p>Somery is local-first. Your journal works without cloud sync by default, with optional export and privacy controls.</p>
+      </div>
+
+      <ul>
+        {privacyItems.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section id="pricing" class="section soft-section">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Pricing</p>
+        <h2>Start free. Upgrade when you want deeper insights.</h2>
+      </div>
+
+      <div class="pricing-grid">
+        {
+          pricing.map((plan) => (
+            <article class:list={["price-card", plan.popular && "popular", "reveal"]}>
+              {plan.badge && <div class:list={["badge", plan.mutedBadge && "muted"]}>{plan.badge}</div>}
+              <h3>{plan.title}</h3>
+              <p class="price">
+                {plan.price} {plan.suffix && <span>{plan.suffix}</span>}
+              </p>
+              <p>{plan.text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">FAQ</p>
+        <h2>Questions before you begin.</h2>
+      </div>
+
+      <div class="faq-list">
+        {
+          faq.map(([question, answer]) => (
+            <details class="reveal">
+              <summary>{question}</summary>
+              <p>{answer}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</SomeryLayout>
