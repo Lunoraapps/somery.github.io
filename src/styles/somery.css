@@ -816,6 +816,72 @@ details p {
     }
 }
 
+/* ── Legal pages (privacy, terms) ───────────────────────────────────── */
+
+.legal-page h1 {
+    font-size: clamp(38px, 5vw, 64px);
+    letter-spacing: -.04em;
+    margin-bottom: 10px;
+}
+
+.legal-meta {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 0;
+}
+
+.legal-body {
+    max-width: 760px;
+    margin-top: 48px;
+}
+
+.legal-body h2 {
+    font-size: 22px;
+    letter-spacing: -.02em;
+    margin-top: 52px;
+    margin-bottom: 14px;
+    color: var(--accent-2);
+    max-width: none;
+}
+
+.legal-body p {
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.75;
+    margin-bottom: 16px;
+}
+
+.legal-body ul {
+    margin: 0 0 16px;
+    padding-left: 22px;
+}
+
+.legal-body li {
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.75;
+    margin-bottom: 8px;
+}
+
+.legal-body li::marker {
+    color: var(--accent);
+}
+
+.legal-body a {
+    color: var(--accent-2);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.legal-body a:hover {
+    color: var(--text);
+}
+
+.legal-body strong {
+    color: var(--text);
+    font-weight: 600;
+}
+
 @media (prefers-reduced-motion: reduce) {
     html {
         scroll-behavior: auto;
